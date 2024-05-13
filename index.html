@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODOs Page</title>
+</head>
+
+<body>
+    <h2>TODOs Page</h2>
+
+    <!-- Input box for user ID -->
+    <label for="userId">Enter User ID:</label>
+    <input type="text" id="userIdInput"><br><br>
+
+    <!-- Button to fetch TODOs -->
+    <button id="fetchTodoButton">Fetch TODO</button>
+
+    <div id="todoResult"></div> <!-- Placeholder for displaying TODO data -->
+
+    <script>
+        // Function to handle fetching data when button is clicked
+        function getData() {
+            // Get the user ID entered by the user
+            let userId = document.getElementById("userIdInput").value;
+
+            // Construct the API URL using the entered user ID
+            let apiUrl = `https://jsonplaceholder.typicode.com/todos/${userId}`;
+
+            // Fetch data from the API using the constructed URL
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Display the fetched data
+                    displayTodo(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching TODO:', error);
+                    document.getElementById("todoResult").innerText = "Error fetching TODO. Please try again.";
+                });
+        }
+
+        // Function to display the fetched TODO data
+        function displayTodo(todo) {
+            let todoResultElement = document.getElementById("todoResult");
+            todoResultElement.innerHTML = ''; // Clear previous content
+
+            // Create and populate elements to display TODO details
+            let todoTitle = document.createElement("h3");
+            todoTitle.textContent = `TODO Title: ${todo.title}`;
+
+          
+
+            // Append elements to the result container
+            todoResultElement.appendChild(todoTitle);
+            
+        }
+
+        // Attach event listener to the button
+        document.getElementById("fetchTodoButton").addEventListener("click", getData);
+    </script>
+</body>
+
+</html>
